@@ -1,6 +1,7 @@
 import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:whatsapp_messenger/common/extension/custom_theme_extension.dart';
+import 'package:whatsapp_messenger/common/helper/show_alert_dialog.dart';
 import 'package:whatsapp_messenger/common/utils/coloors.dart';
 import 'package:whatsapp_messenger/common/widgets/custom_elevated_button.dart';
 import 'package:whatsapp_messenger/common/widgets/custom_icon_button.dart';
@@ -64,13 +65,35 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  @override
-  void dispose() {
-    countryNameController.dispose();
-    countryCodeController.dispose();
-    phoneNumberController.dispose();
+  sendCodeToPhone() {
+    final phone = phoneNumberController.text;
+    final name = countryNameController.text;
 
-    super.dispose();
+    if (phone.isEmpty) {
+      return showAlertDialog(
+        context: context,
+        message: "Please enter your phone number",
+      );
+    } else if (phone.length < 9) {
+      return showAlertDialog(
+        context: context,
+        message: "The phone number you entered is too short for country: $name.\n\nInclude your area code if you haven't",
+      );
+    } else if (phone.length > 10) {
+      return showAlertDialog(
+        context: context,
+        message: "The phone number you entered is too long for country: $name.",
+      );
+    }
+
+    @override
+    void dispose() {
+      countryNameController.dispose();
+      countryCodeController.dispose();
+      phoneNumberController.dispose();
+
+      super.dispose();
+    }
   }
 
   @override
@@ -164,7 +187,7 @@ class _LoginPageState extends State<LoginPage> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: CustomElevatedButton(
-        onPressed: () {},
+        onPressed: sendCodeToPhone,
         text: "Next",
         buttonWidth: 90,
       ),
