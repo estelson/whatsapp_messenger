@@ -48,11 +48,11 @@ class CustomTextField extends StatelessWidget {
         hintText: hintText,
         hintStyle: TextStyle(color: context.theme.greyColor),
         enabledBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(color: Coloors.greyDark),
+          borderSide: BorderSide(color: Coloors.greenDark),
         ),
         focusedBorder: const UnderlineInputBorder(
           borderSide: BorderSide(
-            color: Coloors.greyDark,
+            color: Coloors.greenDark,
             width: 2,
           ),
         ),
