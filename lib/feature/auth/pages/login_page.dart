@@ -110,7 +110,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        elevation: 0,
         title: Text(
           "Enter your phone number",
           style: TextStyle(color: context.theme.authAppBarTextColor),

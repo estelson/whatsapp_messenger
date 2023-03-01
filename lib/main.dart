@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:whatsapp_messenger/common/routes/routes.dart';
 import 'package:whatsapp_messenger/common/theme/dark_theme.dart';
 import 'package:whatsapp_messenger/common/theme/light_theme.dart';
-import 'package:whatsapp_messenger/feature/welcome/pages/welcome_page.dart';
+import 'package:whatsapp_messenger/feature/auth/pages/user_info_page.dart';
 import 'package:whatsapp_messenger/firebase_options.dart';
 
 void main() async {
@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
       theme: lightTheme(),
       darkTheme: darkTheme(),
       themeMode: ThemeMode.system,
-      home: const WelcomePage(),
+      home: const UserInfoPage(),
       onGenerateRoute: Routes.onGenerateRoute,
     );
   }

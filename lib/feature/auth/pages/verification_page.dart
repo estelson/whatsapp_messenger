@@ -33,8 +33,6 @@ class VerificationPage extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        centerTitle: true,
-        elevation: 0,
         title: Text(
           "Verify your number",
           style: TextStyle(

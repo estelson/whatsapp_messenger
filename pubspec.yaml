@@ -38,6 +38,8 @@ dependencies:
   flutter_native_splash: ^2.2.18
   country_picker: ^2.0.19
   flutter_riverpod: ^2.2.0
+  image_picker: ^0.8.6+4
+  photo_manager: ^2.5.2
 
   # Firebase related dependencies
   firebase_core: ^2.7.0
