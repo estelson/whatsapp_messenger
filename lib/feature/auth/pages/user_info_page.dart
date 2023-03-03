@@ -15,7 +15,12 @@ import 'package:whatsapp_messenger/feature/auth/pages/image_picker_page.dart';
 import 'package:whatsapp_messenger/feature/auth/widgets/custom_text_field.dart';
 
 class UserInfoPage extends ConsumerStatefulWidget {
-  const UserInfoPage({Key? key}) : super(key: key);
+  final String? profileImageUrl;
+
+  const UserInfoPage({
+    Key? key,
+    this.profileImageUrl,
+  }) : super(key: key);
 
   @override
   ConsumerState<UserInfoPage> createState() => _UserInfoPageState();
@@ -38,7 +43,7 @@ class _UserInfoPageState extends ConsumerState<UserInfoPage> {
 
     ref.read(authControllerProvider).saveUserInfoToFirestore(
           userName: userName,
-          profileImage: imageCamera ?? imageGallery ?? "",
+          profileImage: imageCamera ?? imageGallery ?? widget.profileImageUrl ?? "",
           context: context,
           mounted: mounted,
         );
@@ -195,10 +200,14 @@ class _UserInfoPageState extends ConsumerState<UserInfoPage> {
                   border: Border.all(
                     color: imageCamera == null && imageGallery == null ? Colors.transparent : context.theme.greyColor!.withOpacity(0.4),
                   ),
-                  image: imageCamera != null || imageGallery != null
+                  image: imageCamera != null || imageGallery != null || widget.profileImageUrl != null
                       ? DecorationImage(
                           fit: BoxFit.cover,
-                          image: imageGallery != null ? MemoryImage(imageGallery!) as ImageProvider : FileImage(imageCamera!),
+                          image: imageGallery != null
+                              ? MemoryImage(imageGallery!)
+                              : widget.profileImageUrl != null
+                                  ? NetworkImage(widget.profileImageUrl!)
+                                  : FileImage(imageCamera!) as ImageProvider,
                         )
                       : null,
                 ),
@@ -207,7 +216,9 @@ class _UserInfoPageState extends ConsumerState<UserInfoPage> {
                   child: Icon(
                     Icons.add_a_photo_rounded,
                     size: 48,
-                    color: imageCamera == null && imageGallery == null ? context.theme.photoIconColor : Colors.transparent,
+                    color: imageCamera == null && imageGallery == null && widget.profileImageUrl == null
+                        ? context.theme.photoIconColor
+                        : Colors.transparent,
                   ),
                 ),
               ),
@@ -216,7 +227,7 @@ class _UserInfoPageState extends ConsumerState<UserInfoPage> {
             Row(
               children: [
                 const SizedBox(width: 10),
-                 Expanded(
+                Expanded(
                   child: CustomTextField(
                     controller: userNameController,
                     hintText: "Type your name here",
