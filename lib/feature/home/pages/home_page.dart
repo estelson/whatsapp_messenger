@@ -34,6 +34,7 @@ class HomePage extends StatelessWidget {
           ),
         ),
         body: const TabBarView(
+          physics: BouncingScrollPhysics(),
           children: [
             ChatHomePage(),
             StatusHomePage(),
