@@ -3,6 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:whatsapp_messenger/common/helper/show_alert_dialog.dart';
+import 'package:whatsapp_messenger/common/models/user_model.dart';
+import 'package:whatsapp_messenger/common/repository/firebase_storage_repository.dart';
 import 'package:whatsapp_messenger/common/routes/routes.dart';
 
 final authRepositoryProvider = Provider(
@@ -23,6 +25,44 @@ class AuthRepository {
     required this.firestore,
   });
 
+  void saveUserInfoToFirestore({
+    required String userName,
+    required var profileImage,
+    required ProviderRef ref,
+    required BuildContext context,
+    required bool mounted,
+  }) async {
+    try {
+      String uid = auth.currentUser!.uid;
+      // String profileImageUrl = "";
+      String profileImageUrl = profileImage is String ? profileImage : "";
+      if (profileImage != null && profileImage is! String) {
+        profileImageUrl = await ref.read(firebaseStorageRepositoryProvider).storeFileToFirebase("profileImage/$uid", profileImage);
+      }
+
+      UserModel user = UserModel(
+        userName: userName,
+        uid: uid,
+        profileImageUrl: profileImageUrl,
+        active: true,
+        phoneNumber: auth.currentUser!.phoneNumber!,
+        groupId: [],
+      );
+
+      await firestore.collection("users").doc(uid).set(user.toMap());
+
+      if (!mounted) return;
+
+      Navigator.pushNamedAndRemoveUntil(
+        context,
+        Routes.home,
+        (route) => false,
+      );
+    } on FirebaseAuthException catch (e) {
+      showAlertDialog(context: context, message: e.toString());
+    }
+  }
+
   void verifySmsCode({
     required BuildContext context,
     required String smsCodeId,
@@ -37,7 +77,7 @@ class AuthRepository {
 
       await auth.signInWithCredential(credential);
 
-      if(!mounted) return;
+      if (!mounted) return;
 
       Navigator.of(context).pushNamedAndRemoveUntil(
         Routes.userInfo,
