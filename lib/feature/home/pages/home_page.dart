@@ -27,9 +27,9 @@ class HomePage extends StatelessWidget {
             labelStyle: TextStyle(fontWeight: FontWeight.bold),
             splashFactory: NoSplash.splashFactory,
             tabs: [
-              Tab(text: "CHATS"),
-              Tab(text: "STATUS"),
-              Tab(text: "CALLS"),
+              Tab(text: "Chats"),
+              Tab(text: "Status"),
+              Tab(text: "Calls"),
             ],
           ),
         ),

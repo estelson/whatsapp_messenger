@@ -40,6 +40,8 @@ dependencies:
   flutter_riverpod: ^2.2.0
   image_picker: ^0.8.6+4
   photo_manager: ^2.5.2
+  flutter_contacts: ^1.1.6
+  url_launcher: ^6.1.10
 
   # Firebase related dependencies
   firebase_core: ^2.7.0

@@ -1,7 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:whatsapp_messenger/common/extension/custom_theme_extension.dart';
 import 'package:whatsapp_messenger/common/routes/routes.dart';
 import 'package:whatsapp_messenger/common/theme/dark_theme.dart';
 import 'package:whatsapp_messenger/common/theme/light_theme.dart';
@@ -11,7 +11,10 @@ import 'package:whatsapp_messenger/feature/welcome/pages/welcome_page.dart';
 import 'package:whatsapp_messenger/firebase_options.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+
+  // These keeps the splash screen on until it loaded up all necessary data
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -37,6 +40,9 @@ class MyApp extends ConsumerWidget {
       themeMode: ThemeMode.system,
       home: ref.watch(userInfoAuthProvider).when(
         data: (user) {
+          // These will make disappear the splash screen when all data is loaded
+          FlutterNativeSplash.remove();
+
           if (user == null) return const WelcomePage();
           return const HomePage();
         },
@@ -48,14 +54,7 @@ class MyApp extends ConsumerWidget {
           );
         },
         loading: () {
-          return const Scaffold(
-            body: Center(
-              child: Icon(
-                Icons.phone,
-                size: 30,
-              ),
-            ),
-          );
+          return const SizedBox();
         },
       ),
       onGenerateRoute: Routes.onGenerateRoute,
